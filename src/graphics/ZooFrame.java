@@ -13,7 +13,6 @@ public class ZooFrame extends JFrame implements ActionListener
    private JMenu m1, m2, m3;
    private JMenuItem[] mi;
    private JMenuBar mb;
-   private int kaki;
 
    public static void main(String[]args)
    {
