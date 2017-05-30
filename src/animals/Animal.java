@@ -17,7 +17,7 @@ import mobility.Point;
 
 public abstract class Animal extends Mobile implements IEdible,IDrawable,IAnimalBehavior,Runnable {
 
-	int aviv_homo;
+	int aviv_homo_ss;
 
 	protected final int EAT_DISTANCE = 5;
 	private IDiet diet;
