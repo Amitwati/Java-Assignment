@@ -165,7 +165,26 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		   JOptionPane.showMessageDialog(this, "You cannot add more than "+MAX_ANIMAL_NUMBER+" animals");
 	   }
 	   else {
-		   AddAnimalDialog dial = new AddAnimalDialog(this,"Add an animal to aquarium");
+           String[] opt = {"Carnivore","Herbivore","Omnivore"};
+
+           int res = JOptionPane.showOptionDialog(null,"choose animal type :","animal select",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,
+                   null,opt,"ss");
+
+           String prase;
+           switch (res) {
+               case 0:
+                   prase = "CARN";
+                   break;
+               case 1:
+                   prase = "HERB";
+                   break;
+               case 2:
+                   prase = "OMNI";
+                   break;
+               default:
+                   return;
+           }
+		   AddAnimalDialog dial = new AddAnimalDialog(this,prase);
 		   dial.setVisible(true);
 	   }
    }

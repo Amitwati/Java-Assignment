@@ -12,7 +12,9 @@ public class AddAnimalDialog extends JDialog implements ItemListener, ActionList
     private JSlider sl_sz, sl_hor, sl_ver;
     private ButtonGroup rbg, rbg1;
     private String[] colors = {"Natural","Red","Blue"};
-    private String[] animals = {"Elephant","Lion","Giraffe","Turtle","Bear"};
+    private String[] Carn = {"Lion"},
+			Harb = {"Elephant","Giraffe","Turtle"},
+			Omni = {"Bear"},animals;
     private String chosenAnimal;
     private String c;
     private JRadioButton[] rb;
@@ -25,7 +27,19 @@ public class AddAnimalDialog extends JDialog implements ItemListener, ActionList
     	ap = pan;
 
     	setSize(550,300);
-	
+
+    	switch (title){
+			case "CARN":
+				animals = Carn;
+				break;
+			case "HERB":
+				animals = Harb;
+				break;
+			case "OMNI":
+				animals = Omni;
+				break;
+		}
+
 		setBackground(new Color(100,230,255));
 		p1 = new JPanel();
 		p2 = new JPanel();
