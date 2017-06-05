@@ -3,7 +3,8 @@ package graphics;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ZooFrame extends JFrame implements ActionListener
 {
@@ -13,6 +14,7 @@ public class ZooFrame extends JFrame implements ActionListener
    private JMenu m1, m2, m3;
    private JMenuItem[] mi;
    private JMenuBar mb;
+
 
    public static void main(String[]args)
    {
@@ -25,7 +27,7 @@ public class ZooFrame extends JFrame implements ActionListener
    public ZooFrame()
    {
 	    super("Zoo");
-	    panel = new ZooPanel(this);
+	    panel = ZooPanel.getInstance(this);
 	    add(panel);
 	    panel.setVisible(true);
 

@@ -18,6 +18,7 @@ public abstract class Plant implements IEdible, ILocatable, IDrawable {
 	private Point location;
 	protected ZooPanel pan;
 	protected BufferedImage img;
+
 	
 	public Plant(ZooPanel p) {
 		pan = p;

@@ -4,8 +4,10 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Future;
 import javax.imageio.ImageIO;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import diet.IDiet;
 import food.EFoodType;
 import food.IEdible;
@@ -23,12 +25,13 @@ public abstract class Animal extends Mobile implements IEdible,IDrawable,IAnimal
 	private IDiet diet;
 	protected String name;
 	private double weight;
+	boolean isRun;
 	protected int size;
 	protected String col;
 	protected int horSpeed;
 	protected int verSpeed;
 	protected boolean coordChanged;
-	protected Thread thread;
+	protected Future<?> task;
 	protected int x_dir;
 	protected int y_dir;
 	protected int eatCount;
@@ -45,6 +48,7 @@ public abstract class Animal extends Mobile implements IEdible,IDrawable,IAnimal
 		name = new String(nm);
 		size = sz;
 		weight = w;
+		isRun = false;
 		horSpeed = hor;
 		verSpeed = ver;
 		col = c;
@@ -56,7 +60,7 @@ public abstract class Animal extends Mobile implements IEdible,IDrawable,IAnimal
 		cor_x2=cor_y2=cor_x4=cor_y4=-1;
 		cor_w = cor_h = size;
 		coordChanged = false;
-		thread = new Thread(this);
+
 	}	
 	
 	public EFoodType getFoodtype() { return EFoodType.MEAT;	}	
@@ -77,9 +81,17 @@ public abstract class Animal extends Mobile implements IEdible,IDrawable,IAnimal
 	synchronized public boolean getChanges(){ return coordChanged; }
 	synchronized public void setChanges(boolean state){ coordChanged = state; }	 
 	public String getColor() { return col; }
-	public void start() { thread.start(); }
-	public void interrupt() { thread.interrupt(); }
-	
+	public boolean isRunning() { return isRun; }
+
+	public void interrupt() {
+		isRun = false;
+		task.cancel(true); // to remove thread of animal from Threadpool
+	}
+
+	public void setTask(Future<?> tsk) {
+		this.task = tsk;
+	}
+
 	public void loadImages(String nm){
 		 switch(getColor()){
 			 case "Red":
@@ -101,7 +113,8 @@ public abstract class Animal extends Mobile implements IEdible,IDrawable,IAnimal
 
     public void run() 
     {
-       while (true) 
+    	isRun = true;
+       while (isRun)
        {
            try 
            {

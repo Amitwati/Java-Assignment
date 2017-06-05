@@ -22,11 +22,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ZooPanel extends JPanel implements ActionListener, Runnable
 {
    private static final long serialVersionUID = 1L;
-   private static final int MAX_ANIMAL_NUMBER  = 10;
+   private static final int MAX_ANIMAL_NUMBER  = 15;
    private final String BACKGROUND_PATH = Animal.PICTURE_PATH+"savanna.jpg";
    private final String MEAT_PATH = Animal.PICTURE_PATH+"meat.gif";
    private final int RESOLUTION = 25; 
@@ -43,8 +46,10 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
    private BufferedImage img, img_m;
    private boolean bgr;
    private Thread controller;
-   
-   public ZooPanel(ZooFrame f)
+   private ExecutorService pool;
+   private static ZooPanel instance;
+
+    private ZooPanel(ZooFrame f)
    {
 	    frame = f;
 	    Food = EFoodType.NOTFOOD;
@@ -54,9 +59,11 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 	    animals = new ArrayList<Animal>();
 
 	    controller = new Thread(this);
-	    controller.start();	    
-	   
-	    setBackground(new Color(255,255,255));
+	    controller.start();
+
+	   pool = Executors.newFixedThreadPool(2);
+
+	   setBackground(new Color(255,255,255));
 	    
 	    p1=new JPanel();
 		p1.setLayout(new GridLayout(1,7,0,0));
@@ -80,7 +87,14 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		catch (IOException e) { System.out.println("Cannot load background"); }
 		try { img_m = ImageIO.read(new File(MEAT_PATH)); } 
 		catch (IOException e) { System.out.println("Cannot load meat"); }
-   }		
+   }
+
+   public static ZooPanel getInstance(ZooFrame f){
+       if(instance == null)
+           instance = new ZooPanel(f);
+
+       return instance;
+   }
 
    public void paintComponent(Graphics g)
    {
@@ -97,7 +111,9 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 
 	   	synchronized(this) {
 		   	for(Animal an : animals)
-		    	an.drawObject(g);
+		   	    if(an.isRunning()) {
+                    an.drawObject(g);
+                }
 	   	}
    }
    
@@ -124,7 +140,7 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 
    /**
     * CallBack function 
-    * @param f
+    * @param an
     */
    synchronized public void eatFood(Animal an)
    {
@@ -145,7 +161,7 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 
    public void addDialog()
    {
-	   if(animals.size()==MAX_ANIMAL_NUMBER) {
+       if(animals.size()==MAX_ANIMAL_NUMBER) {
 		   JOptionPane.showMessageDialog(this, "You cannot add more than "+MAX_ANIMAL_NUMBER+" animals");
 	   }
 	   else {
@@ -168,7 +184,7 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 	   else 
 		   an = new Giraffe(sz,0,0,hor,ver,c,this);
 	   animals.add(an);
-	   an.start();
+	   an.setTask(pool.submit(an));
    }
 
 	public void start() {
@@ -183,10 +199,19 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 
    synchronized public void clear()
    {
-	   for(Animal an : animals)
-	    an.interrupt();
-	   animals.clear();
-	   Food = EFoodType.NOTFOOD;
+       ArrayList<Animal> temp = new ArrayList<>();
+       for (Animal an:animals) {
+           if(an.isRunning()){
+               an.interrupt();
+           }
+           else{
+               temp.add(an);
+           }
+       }
+
+       animals.clear();
+       animals = temp;
+       Food = EFoodType.NOTFOOD;
 	   forFood = null;
 	   totalCount = 0;
 	   repaint();
@@ -212,11 +237,11 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 			   break;
 		   case 1: // Cabbage
 			   Food = EFoodType.VEGETABLE;
-			   forFood = new Cabbage(this);
+			   forFood = Cabbage.getInstance(this);
 			   break;
 		   default: // Lettuce
 			   Food = EFoodType.VEGETABLE;
-			   forFood = new Lettuce(this);
+			   forFood = Lettuce.getInstance(this);
 			   break;
 		   }
 	   }
