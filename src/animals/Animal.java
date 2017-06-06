@@ -17,7 +17,7 @@ import graphics.ZooPanel;
 import mobility.Mobile;
 import mobility.Point;
 
-public abstract class Animal extends Mobile implements IEdible,IDrawable,IAnimalBehavior,Runnable {
+public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IEdible,IDrawable,IAnimalBehavior,Runnable {
 
 	int aviv_homo_ss;
 
@@ -82,6 +82,14 @@ public abstract class Animal extends Mobile implements IEdible,IDrawable,IAnimal
 	synchronized public void setChanges(boolean state){ coordChanged = state; }	 
 	public String getColor() { return col; }
 	public boolean isRunning() { return isRun; }
+
+	@Override
+	public void PaintAnimal(String col) {
+		if(!this.col.equals("Natural")) {
+			this.col = col;
+			loadImages(col);
+		}
+	}
 
 	public void interrupt() {
 		isRun = false;

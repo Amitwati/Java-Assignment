@@ -35,9 +35,10 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
    private final int RESOLUTION = 25; 
    private ZooFrame frame;
    private EFoodType Food;
-   private JPanel p1;
-   private JButton[] b_num;
-   private String[] names = {"Add Animal","Sleep","Wake up","Clear","Food","Info","Exit"};
+   private JPanel p1,p2,p3;
+   private JButton[] b_num,b_num2;
+   private String[] names = {"Add Animal","Sleep","Wake up","Clear","Food","Info"},
+	names2 = {"Decorator","Duplicate","Save state","Restore state","Exit"};
    private ArrayList<Animal> animals;
    private Plant forFood = null;
    private JScrollPane scrollPane;
@@ -69,7 +70,15 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		p1.setLayout(new GridLayout(1,7,0,0));
 		p1.setBackground(new Color(0,150,255));
 
-		b_num=new JButton[names.length];
+	   	p2=new JPanel();
+	   	p2.setLayout(new GridLayout(1,5,0,0));
+	   	p2.setBackground(new Color(0,150,255));
+
+	   	p3 = new JPanel();
+	   	p3.setLayout(new GridLayout(2,1,0,0));
+
+		b_num = new JButton[names.length];
+	   	b_num2 = new JButton[names2.length];
 		for(int i=0;i<names.length;i++)
 		{
 		    b_num[i]=new JButton(names[i]);
@@ -78,8 +87,18 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		    p1.add(b_num[i]);		
 		}
 
+		for(int i=0;i<names2.length;i++){
+			b_num2[i]=new JButton(names2[i]);
+			b_num2[i].addActionListener(this);
+			b_num2[i].setBackground(Color.lightGray);
+			p2.add(b_num2[i]);
+		}
+
 		setLayout(new BorderLayout());
-		add("South", p1);
+		p3.add(p1);
+	   	p3.add(p2);
+
+	   	add("South", p3);
 		
 		img = img_m = null;
 		bgr = false;
@@ -278,20 +297,24 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		  int i=0;
 		  int sz = animals.size();
 
-		  String[] columnNames = {"Animal","Color","Weight","Hor. speed","Ver. speed","Eat counter"};
+		  String[] columnNames = {"Animal","state","Color","Weight","Hor. speed","Ver. speed","Eat counter"};
 	      String [][] data = new String[sz+1][columnNames.length];
 		  for(Animal an : animals)
 	      {
 	    	  data[i][0] = an.getName();
-	    	  data[i][1] = an.getColor();
-	    	  data[i][2] = new Integer((int)(an.getWeight())).toString();
-		      data[i][3] = new Integer(an.getHorSpeed()).toString();
-		      data[i][4] = new Integer(an.getVerSpeed()).toString();
-	    	  data[i][5] = new Integer(an.getEatCount()).toString();
+	    	  if(an.isRunning())
+	    	  	data[i][1] = "Running";
+	    	  else
+				  data[i][1] = "Blocked";
+	    	  data[i][2] = an.getColor();
+	    	  data[i][3] = new Integer((int)(an.getWeight())).toString();
+		      data[i][4] = new Integer(an.getHorSpeed()).toString();
+		      data[i][5] = new Integer(an.getVerSpeed()).toString();
+	    	  data[i][6] = new Integer(an.getEatCount()).toString();
 	    	  i++;
 	      }
 	      data[i][0] = "Total";
-	      data[i][5] = new Integer(totalCount).toString();
+	      data[i][6] = new Integer(totalCount).toString();
 	      
 	      JTable table = new JTable(data, columnNames);
 	      scrollPane = new JScrollPane(table);
@@ -306,6 +329,36 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 	   scrollPane.setVisible(isTableVisible);
        repaint();
    }
+
+    public void Duplicate(){
+       ArrayList<String> items = new ArrayList<String>();
+       String temp;
+        Animal an;
+
+        for (int i=0;i<animals.size();i++) {
+             an = animals.get(i);
+            temp = (i+1)+".["+ an.getName() + " : running = " + an.isRunning() + ", weight = "
+                    + an.getWeight() + ", color = "+an.getColor();
+            items.add(temp);
+
+        }
+
+       JComboBox<String> cmbx = new JComboBox<String>(items.toArray(new String[]{}));
+        JRadioButton blue,red;
+        blue = new JRadioButton("Blue");
+        red = new JRadioButton("Red");
+        ButtonGroup btngrp = new ButtonGroup();
+        btngrp.add(blue);
+        btngrp.add(red);
+
+       JComponent[] inputs = new JComponent[]{
+               cmbx,
+               blue,
+               red
+       };
+
+       JOptionPane.showConfirmDialog(null, inputs, "Decorate an animal", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+    }
 
    public void destroy()
    { 
@@ -329,8 +382,18 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		addFood();
 	else if(e.getSource() == b_num[5]) // "Info"
 		info();
-	else if(e.getSource() == b_num[6]) // "Exit"
+	//---------------------------------------------------------
+	else if(e.getSource() == b_num2[0])  //"Decorate"
+        Duplicate();
+	else if(e.getSource() == b_num2[1]) //"Duplicate"
+		System.out.println("DUPLICATE");
+	else if(e.getSource() == b_num2[2]) //"Save State"
+		System.out.println("SAVE");
+	else if(e.getSource() == b_num2[3]) //"Restore state"
+		System.out.println("RESTORE");
+	else if(e.getSource() == b_num2[4]) // "Exit"
 		destroy();
+
    }
 
 	public void run() {
