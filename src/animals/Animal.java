@@ -17,7 +17,7 @@ import graphics.ZooPanel;
 import mobility.Mobile;
 import mobility.Point;
 
-public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IEdible,IDrawable,IAnimalBehavior,Runnable {
+public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IEdible,IDrawable,IAnimalBehavior,Runnable,Cloneable {
 
 	int aviv_homo_ss;
 
@@ -43,7 +43,6 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
 	
 	public Animal(String nm, int sz, int w, int hor, int ver, String c, ZooPanel p) {
 		super(new Point(0,0));
-        System.out.println("animal");
         name = new String(nm);
 		size = sz;
 		weight = w;
@@ -233,5 +232,9 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
 
     public String toString(){
     	return "["+getName() + ": weight=" + weight + ", color="+col+"]";
+    }
+
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
     }
 }

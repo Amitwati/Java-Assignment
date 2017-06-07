@@ -7,7 +7,7 @@ import mobility.Point;
 public class Giraffe extends Animal {
 
 	 public Giraffe(int s,int x, int y, int h, int v, String c, ZooPanel p) {
-		 super("Giraffe",s*4/3,s*2,h,v,c,p);
+		 super("Giraffe",s,s*2,h,v,c,p);
 		 setLocation(new Point(0,0));
 		 setDiet(new Herbivore());
 		 loadImages("grf");

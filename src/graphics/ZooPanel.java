@@ -399,6 +399,64 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 
 	}
 
+	public void Duplicate(){
+        if (animals.size() == 10){
+            JOptionPane.showMessageDialog(this,
+                    "Can't duplicate because there too many animals!");
+            return;
+        }
+        ArrayList<String> items = new ArrayList<String>();
+        String temp;
+        Animal an;
+        items.add("No animal");
+        for (int i=0;i<animals.size();i++) {
+            an = animals.get(i);
+            temp = (i+1)+".["+ an.getName() + " : running = " + an.isRunning() + ", weight = "
+                    + an.getWeight() + ", color = "+an.getColor();
+            items.add(temp);
+        }
+        if(items.size() == 1){
+            JOptionPane.showMessageDialog(this,
+                    "There are no animals to duplicate!");
+            return;
+        }
+        JSlider sl_hor = new JSlider(0,10);
+        sl_hor.setMajorTickSpacing(2);
+        sl_hor.setMinorTickSpacing(1);
+        sl_hor.setPaintTicks(true);
+        sl_hor.setPaintLabels(true);
+        p1.add(sl_hor);
+
+        JSlider sl_ver = new JSlider(0,10);
+        sl_ver.setMajorTickSpacing(2);
+        sl_ver.setMinorTickSpacing(1);
+        sl_ver.setPaintTicks(true);
+        sl_ver.setPaintLabels(true);
+        p1.add(sl_ver);
+
+        JLabel horLbl = new JLabel("Horizontal speed:");
+        JLabel verLbl = new JLabel("Vertical speed:");
+
+        JComboBox<String> cmbx = new JComboBox<String>(items.toArray(new String[]{}));
+
+        JComponent[] inputs = new JComponent[]{cmbx,horLbl,sl_hor,verLbl,sl_ver};
+
+        int res = JOptionPane.showConfirmDialog(null, inputs,
+                "Duplicate an animal", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE, null);
+
+        int selected_indx = cmbx.getSelectedIndex();
+
+        if((res == 0) && (selected_indx > 0)){
+            an = animals.get(selected_indx - 1);
+            try{
+                an = (Animal)an.clone();
+                addAnimal(an.getClass().getSimpleName(),an.getSize(),sl_hor.getValue(),sl_ver.getValue(),an.getColor());
+            }
+            catch (CloneNotSupportedException e) { System.out.println("Cannot duplicate animal"); }
+        }
+    }
+
    public void destroy()
    { 
 	  for(Animal an : animals)
@@ -425,7 +483,7 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 	else if(e.getSource() == b_num2[0])  //"Decorate"
 		Decorate();
 	else if(e.getSource() == b_num2[1]) //"Duplicate"
-		System.out.println("DUPLICATE");
+		Duplicate();
 	else if(e.getSource() == b_num2[2]) //"Save State"
 		System.out.println("SAVE");
 	else if(e.getSource() == b_num2[3]) //"Restore state"
@@ -479,7 +537,4 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		return rc;
 	}
 
-//	public void componentResized(ComponentEvent e) {
-//		System.out.println(e.getComponent().getClass().getName() + " --- Resized ");
-//	}
 }

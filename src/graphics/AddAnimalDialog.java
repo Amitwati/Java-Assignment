@@ -151,7 +151,7 @@ public class AddAnimalDialog extends JDialog implements ItemListener, ActionList
     {
  		if(e.getSource() == ok)
 		{
-		    ap.addAnimal(chosenAnimal,sl_sz.getValue(),sl_hor.getValue(),sl_ver.getValue(),c);
+			ap.addAnimal(chosenAnimal,sl_sz.getValue(),sl_hor.getValue(),sl_ver.getValue(),c);
 		    setVisible(false);
 		}
 		else 

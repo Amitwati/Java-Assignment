@@ -7,7 +7,7 @@ import mobility.Point;
 public class Elephant extends Animal {
 
 	 public Elephant(int s,int x, int y, int h, int v, String c, ZooPanel p) {
-		 super("Elephant",(int)(s*1.4),(s-45)*20,h,v,c,p);
+		 super("Elephant",(int)(s),(s-45)*20,h,v,c,p);
 		 setLocation(new Point(x,y));
 		 setDiet(new Herbivore());
 		 loadImages("elf");
