@@ -22,7 +22,7 @@ public abstract class Plant implements IEdible, ILocatable, IDrawable {
 	
 	public Plant(ZooPanel p) {
 		pan = p;
-		this.location = new Point(pan.getWidth()/2,pan.getHeight()/2);
+		this.location = new Point(pan.getWidth()/2,pan.getHeight()/2 - 45);
 	}
 
 	public void loadImages(String nm){
@@ -33,7 +33,7 @@ public abstract class Plant implements IEdible, ILocatable, IDrawable {
 	}
 
 	public void drawObject(Graphics g) {
-		g.drawImage(img, location.getX()-20, location.getY()-20, 40, 40, pan);
+		g.drawImage(img, pan.getWidth() / 2 , pan.getHeight() / 2 - 45, 40, 40, pan);
 	}
 	
 	public EFoodType getFoodtype() { return EFoodType.VEGETABLE; }

@@ -11,11 +11,7 @@ public class Lion extends Animal {
 		 setLocation(new Point(x,y));
 		 setDiet(new Carnivore());
 		 loadImages("lio");
-		 cor_x4 = 0;
-		 cor_y1 = (int) (-30-size/3);
-		 cor_y3 = (int) (size*0.25);
-		 cor_x5 = cor_x6 = -size/2;
-		 cor_y5 = cor_y6 = -size/3;
+
 		 cor_h = (int)(size*0.73);
 	 }
 }

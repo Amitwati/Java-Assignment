@@ -15,14 +15,7 @@ public class Turtle extends Animal {
 		 setLocation(new Point(x,y));
 		 setDiet(new Herbivore());
 		 loadImages("trt");
-		 cor_x1 = size/4;
-		 cor_x2 = (int) (-size/4);
-		 cor_x3 = (int) (-size*0.25);
-		 cor_x4 = (int) (size*0.25);
-		 cor_y1 = (int) (-30-size*0.125);
-		 cor_y3 = size/8;
-		 cor_x5 = -size;
-		 cor_y5 = cor_y6 = -size/4;
-		 cor_h = (int)(size*0.68);
+
+		 cor_h = (int)(size*0.55);
 	 }
 }

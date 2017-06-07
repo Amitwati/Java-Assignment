@@ -11,12 +11,6 @@ public class Bear extends Animal {
 		 setLocation(new Point(x,y));
 		 setDiet(new Omnivore());
 		 loadImages("bea");
-		 cor_x3 = -size/2;
-		 cor_x4 = 0;
-		 cor_y1 = (int) (-30-size/5);
-		 cor_y3 = (int) (size*0.3);
-		 cor_x5 = -size*6/7;
-		 cor_y5 = cor_y6 = -size/3;
-		 cor_h = (int)(size*2/3);
+		 cor_h = (int)(size*0.55);
 	 }
 }

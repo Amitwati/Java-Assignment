@@ -1,4 +1,5 @@
 package graphics;
+import mobility.Point;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ import animals.Giraffe;
 import animals.Lion;
 import animals.Turtle;
 import food.EFoodType;
+import mobility.*;
 import plants.Cabbage;
 import plants.Lettuce;
 import plants.Plant;
@@ -123,7 +125,7 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
             g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
 
 	   	if(Food == EFoodType.MEAT)
-	   		g.drawImage(img_m, getWidth()/2-20, getHeight()/2-20, 40, 40, this);
+	   		g.drawImage(img_m, getWidth()/2, getHeight()/2-45, 40, 40, this);
 	    
 	   	if((Food == EFoodType.VEGETABLE) && (forFood != null))
 	   		forFood.drawObject(g);
@@ -264,23 +266,25 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
    synchronized public void addFood()
    {
 	   if(Food == EFoodType.NOTFOOD){
-		   Object[] options = {"Meat", "Cabbage", "Lettuce"}; 
-		   int n = JOptionPane.showOptionDialog(frame, 
-		   		"Please choose food", "Food for animals", 
-		   		JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, 
-		   		null, options, options[2]);
-		   switch(n) {
-		   case 0: // Meat
-			   Food = EFoodType.MEAT;
-			   break;
-		   case 1: // Cabbage
-			   Food = EFoodType.VEGETABLE;
-			   forFood = Cabbage.getInstance(this);
-			   break;
-		   default: // Lettuce
-			   Food = EFoodType.VEGETABLE;
-			   forFood = Lettuce.getInstance(this);
-			   break;
+           Object[] options = {"Meat", "Cabbage", "Lettuce"};
+           int n = JOptionPane.showOptionDialog(frame,
+                   "Please choose food", "Food for animals",
+                   JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+                   null, options, options[2]);
+           switch(n) {
+               case 0: // Meat
+                   Food = EFoodType.MEAT;
+                   break;
+               case 1: // Cabbage
+                   Food = EFoodType.VEGETABLE;
+                   forFood = Cabbage.getInstance(this);
+                   break;
+               case 2: // Lettuce
+                   Food = EFoodType.VEGETABLE;
+                   forFood = Lettuce.getInstance(this);
+                   break;
+               default:
+                   break;
 		   }
 	   }
 	   else {
@@ -428,7 +432,6 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		System.out.println("RESTORE");
 	else if(e.getSource() == b_num2[4]) // "Exit"
 		destroy();
-
    }
 
 	public void run() {
@@ -475,4 +478,8 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 	    }
 		return rc;
 	}
+
+//	public void componentResized(ComponentEvent e) {
+//		System.out.println(e.getComponent().getClass().getName() + " --- Resized ");
+//	}
 }

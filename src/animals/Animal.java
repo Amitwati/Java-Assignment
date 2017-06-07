@@ -38,14 +38,13 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
 	protected ZooPanel pan;
 	protected boolean threadSuspended;	 
 	protected BufferedImage img1, img2;
-	protected int cor_x1, cor_x2, cor_x3, cor_x4, cor_x5, cor_x6;
-	protected int cor_y1, cor_y2, cor_y3, cor_y4, cor_y5, cor_y6;
 	protected int cor_w, cor_h;
 	
 	
 	public Animal(String nm, int sz, int w, int hor, int ver, String c, ZooPanel p) {
 		super(new Point(0,0));
-		name = new String(nm);
+        System.out.println("animal");
+        name = new String(nm);
 		size = sz;
 		weight = w;
 		isRun = false;
@@ -55,10 +54,7 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
 		pan = p;
 		x_dir = 1;
 		y_dir = 1;
-		cor_x1=cor_x3=cor_x5=cor_x6=0;
-		cor_y1=cor_y3=cor_y5=cor_y6=0;
-		cor_x2=cor_y2=cor_x4=cor_y4=-1;
-		cor_w = cor_h = size;
+        cor_w = cor_h = size;
 		coordChanged = false;
 
 	}	
@@ -147,7 +143,6 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
            try 
            {
                Thread.sleep(50);
-               
                synchronized(this) {
                    while (threadSuspended)
    						wait();
@@ -164,16 +159,16 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
            		double oldSpead = Math.sqrt(horSpeed*horSpeed+verSpeed*verSpeed);
            		double newHorSpeed = oldSpead*(location.getX() - pan.getWidth()/2)/
            				   (Math.sqrt(Math.pow(location.getX() - pan.getWidth()/2,2)+
-           						      Math.pow(location.getY() - pan.getHeight()/2,2)));
-           		double newVerSpeed = oldSpead*(location.getY() - pan.getHeight()/2)/
+           						      Math.pow(location.getY() - pan.getHeight()/2 + 45,2)));
+           		double newVerSpeed = oldSpead*(location.getY() - pan.getHeight()/2 + 45)/
            				   (Math.sqrt(Math.pow(location.getX() - pan.getWidth()/2,2)+
-           						      Math.pow(location.getY() - pan.getHeight()/2,2)));
+           						      Math.pow(location.getY() - pan.getHeight()/2 + 45,2)));
               	int v = 1;
                 if(newVerSpeed<0) { v=-1; newVerSpeed = -newVerSpeed; }
               	if(newVerSpeed > 10)
               		newVerSpeed = 10;
               	else if(newVerSpeed < 1) {
-              	   if(location.getY() != pan.getHeight()/2)
+              	   if(location.getY() != pan.getHeight()/2 + 45)
               		newVerSpeed = 1;   
               	   else
               		newVerSpeed = 0;  
@@ -195,7 +190,7 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
               	else
               		x_dir = -1;
               	if((Math.abs(location.getX()-pan.getWidth()/2)<EAT_DISTANCE) && 
-              	   (Math.abs(location.getY()-pan.getHeight()/2)<EAT_DISTANCE))
+              	   (Math.abs(location.getY()-pan.getHeight()/2 + 45)<EAT_DISTANCE))
               	{
               		pan.eatFood(this);
               	}
@@ -206,32 +201,19 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
 			    location.setY(location.getY() + verSpeed*y_dir);
            }
 
-		    if(location.getX() > pan.getWidth()+cor_x1)
-		    {
-		    	x_dir = -1;
-		    	if(cor_x2!=-1)
-		    		location.setX(location.getX()+cor_x2);
-		    }
-		    else if(location.getX() < cor_x3)
-		    {
+		    if(location.getX() + cor_w + 10  > pan.getWidth()) {
+                x_dir = -1;
+            }
+		    else if(location.getX() < 0) {
 		    	x_dir = 1;
-		    	if(cor_x4!=-1)
-		    		location.setX(cor_x4);
-		    }
-	
-		    if(location.getY() > (pan.getHeight() + cor_y1))
-		    {
-		    	y_dir = -1;
-		    	if(cor_y2!=-1)
-		    		location.setY(location.getY()+cor_y2);
-		    }
-		    else if(location.getY() < cor_y3)
-		    {
-		    	y_dir = 1;
-		    	if(cor_y4!=-1)
-		    		location.setY(cor_y4);
 		    }
 
+		    if(location.getY() + cor_h + 50 > (pan.getHeight())) {
+		    	y_dir = -1;
+		    }
+		    else if(location.getY() < 0) {
+                y_dir = 1;
+		    }
  		    setChanges(true);
       }
    }
@@ -240,11 +222,11 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
     {
  		if(x_dir==1) // an animal goes to right side
  		{
- 			g.drawImage(img1, location.getX()+cor_x5, location.getY()+cor_y5, cor_w, cor_h, pan);
+ 			g.drawImage(img1, location.getX(), location.getY(), cor_w, cor_h, pan);
  		}
  		else // an animal goes to left side
  		{
- 			g.drawImage(img2, location.getX()+cor_x6, location.getY()+cor_y6, cor_w, cor_h, pan);
+ 			g.drawImage(img2, location.getX(), location.getY(), cor_w, cor_h, pan);
  		}
  		
     }

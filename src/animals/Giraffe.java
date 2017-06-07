@@ -11,14 +11,7 @@ public class Giraffe extends Animal {
 		 setLocation(new Point(0,0));
 		 setDiet(new Herbivore());
 		 loadImages("grf");
-		 cor_x1 = size/4;
-		 cor_x2 = (-size/4);
-		 cor_x3 = (int) (- size*0.25);
-		 cor_x4 = (int) (size*0.25);
-		 cor_y1 = (int) (-30 - size*9/10);
-		 cor_y3 = size/10;
-		 cor_x5 = -size/2;
-		 cor_y5 = cor_y6 = -size/10;
+
 		 cor_w = (int)(size*0.7);
 	 }
 }
