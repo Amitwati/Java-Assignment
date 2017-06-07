@@ -330,13 +330,14 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
        repaint();
    }
 
-    public void Duplicate(){
+    public void Decorate(){
        ArrayList<String> items = new ArrayList<String>();
        String temp;
         Animal an;
 
         for (int i=0;i<animals.size();i++) {
              an = animals.get(i);
+             if(!an.getColor().equals("Natural")) continue;
             temp = (i+1)+".["+ an.getName() + " : running = " + an.isRunning() + ", weight = "
                     + an.getWeight() + ", color = "+an.getColor();
             items.add(temp);
@@ -344,12 +345,15 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
         }
 
        JComboBox<String> cmbx = new JComboBox<String>(items.toArray(new String[]{}));
-        JRadioButton blue,red;
+       JRadioButton blue,red;
+
         blue = new JRadioButton("Blue");
         red = new JRadioButton("Red");
         ButtonGroup btngrp = new ButtonGroup();
+		blue.setSelected(true);
         btngrp.add(blue);
         btngrp.add(red);
+
 
        JComponent[] inputs = new JComponent[]{
                cmbx,
@@ -357,8 +361,35 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
                red
        };
 
-       JOptionPane.showConfirmDialog(null, inputs, "Decorate an animal", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null);
-    }
+       int res = JOptionPane.showConfirmDialog(null, inputs,
+			   "Decorate an animal", JOptionPane.DEFAULT_OPTION,
+			   JOptionPane.PLAIN_MESSAGE, null);
+
+       int selected_indx = cmbx.getSelectedIndex();
+
+		if((res == 0) && (selected_indx >= 0)){
+			if(blue.isSelected()){
+				temp = "Blue";
+
+			}
+			else{
+				temp = "Red";
+			}
+
+			Animal animal = animals.get(selected_indx);
+			if(animal.PaintAnimal(temp)){
+				animals.set(selected_indx,animal);
+			}
+			else{
+				System.out.println("the selected animals is already colored");
+			}
+		}
+		else{
+			System.out.println("User quit the decorator form or did not enter any animal...");
+		}
+
+
+	}
 
    public void destroy()
    { 
@@ -384,7 +415,7 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		info();
 	//---------------------------------------------------------
 	else if(e.getSource() == b_num2[0])  //"Decorate"
-        Duplicate();
+		Decorate();
 	else if(e.getSource() == b_num2[1]) //"Duplicate"
 		System.out.println("DUPLICATE");
 	else if(e.getSource() == b_num2[2]) //"Save State"
