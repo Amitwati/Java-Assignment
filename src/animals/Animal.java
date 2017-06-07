@@ -84,11 +84,31 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
 	public boolean isRunning() { return isRun; }
 
 	@Override
-	public void PaintAnimal(String col) {
-		if(!this.col.equals("Natural")) {
-			this.col = col;
-			loadImages(col);
-		}
+	public boolean PaintAnimal(String col) {
+	    String nm = "";
+		if(!this.col.equals("Natural"))
+			return false;
+        this.col = col;
+
+        if(this instanceof Lion){
+            nm = "lio";
+        }
+        if(this instanceof Bear){
+            nm = "bea";
+        }
+        if(this instanceof Giraffe){
+            nm = "grf";
+        }
+        if(this instanceof Elephant){
+            nm = "elf";
+        }
+        if(this instanceof Turtle){
+            nm = "trt";
+        }
+
+        loadImages(nm);
+		return true;
+
 	}
 
 	public void interrupt() {
