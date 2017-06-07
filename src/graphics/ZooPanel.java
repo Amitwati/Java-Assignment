@@ -343,7 +343,11 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
             items.add(temp);
 
         }
-
+        if(items.size() == 0){
+			JOptionPane.showMessageDialog(this,
+					"All animal are colored!");
+			return;
+		}
        JComboBox<String> cmbx = new JComboBox<String>(items.toArray(new String[]{}));
        JRadioButton blue,red;
 
