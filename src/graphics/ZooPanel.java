@@ -443,6 +443,7 @@ public class ZooPanel extends JPanel implements ActionListener
             an = animals.get(selected_indx - 1);
             try{
                 an = (Animal)an.clone();
+                an.setLocation(new Point(0,0));
                 addAnimal(an);//an.getClass().getSimpleName(),an.getSize(),sl_hor.getValue(),sl_ver.getValue(),an.getColor());
             }
             catch (CloneNotSupportedException e) { System.out.println("Cannot duplicate animal"); }
