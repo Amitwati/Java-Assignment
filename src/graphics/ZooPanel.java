@@ -194,13 +194,13 @@ public class ZooPanel extends JPanel implements ActionListener
            String prase;
            switch (res) {
                case 0:
-                   prase = "CARN";
+                   prase = "Carnivore";
                    break;
                case 1:
-                   prase = "HERB";
+                   prase = "Herbivore";
                    break;
                case 2:
-                   prase = "OMNI";
+                   prase = "Omnivore";
                    break;
                default:
                    return;
@@ -210,20 +210,8 @@ public class ZooPanel extends JPanel implements ActionListener
 	   }
    }
    
-   public void addAnimal(String animal, int sz, int hor, int ver, String c)
+   public void addAnimal(Animal an)
    {
-	   Animal an = null;
-	   if(animal.equals("Elephant"))
-		   an = new Elephant(sz,0,0,hor,ver,c,this);
-	   else if (animal.equals("Lion"))
-		   an = new Lion(sz,0,0,hor,ver,c,this);
-	   else if (animal.equals("Turtle")) 
-		   an = new Turtle(sz,0,0,hor,ver,c,this);
-	   else if (animal.equals("Bear"))
-		   an = new Bear(sz,0,0,hor,ver,c,this);
-	   else 
-		   an = new Giraffe(sz,0,0,hor,ver,c,this);
-
 	   an.addObserver(controller);
 	   animals.add(an);
 	   an.setTask(pool.submit(an));
@@ -455,7 +443,7 @@ public class ZooPanel extends JPanel implements ActionListener
             an = animals.get(selected_indx - 1);
             try{
                 an = (Animal)an.clone();
-                addAnimal(an.getClass().getSimpleName(),an.getSize(),sl_hor.getValue(),sl_ver.getValue(),an.getColor());
+                addAnimal(an);//an.getClass().getSimpleName(),an.getSize(),sl_hor.getValue(),sl_ver.getValue(),an.getColor());
             }
             catch (CloneNotSupportedException e) { System.out.println("Cannot duplicate animal"); }
         }

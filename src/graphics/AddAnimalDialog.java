@@ -1,5 +1,11 @@
 package graphics;
 
+import Factories.AbstractZooFactory;
+import Factories.CarnivoreFactory;
+import Factories.HerbivoreFactory;
+import Factories.OmnivoreFactory;
+import animals.Animal;
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -19,6 +25,7 @@ public class AddAnimalDialog extends JDialog implements ItemListener, ActionList
     private String c;
     private JRadioButton[] rb;
     private JRadioButton[] rb1;
+    AbstractZooFactory zooFactory;
     private ZooPanel ap;
  
     public AddAnimalDialog(ZooPanel pan, String title)
@@ -29,16 +36,15 @@ public class AddAnimalDialog extends JDialog implements ItemListener, ActionList
     	setSize(550,300);
 
     	switch (title){
-			case "CARN":
-				animals = Carn;
+			case "Carnivore": animals = Carn;
 				break;
-			case "HERB":
-				animals = Harb;
+			case "Herbivore": animals = Harb;
 				break;
-			case "OMNI":
-				animals = Omni;
+			case "Omnivore": animals = Omni;
 				break;
 		}
+
+		zooFactory = AbstractZooFactory.createAnimalFactory(title);
 
 		setBackground(new Color(100,230,255));
 		p1 = new JPanel();
@@ -151,7 +157,9 @@ public class AddAnimalDialog extends JDialog implements ItemListener, ActionList
     {
  		if(e.getSource() == ok)
 		{
-			ap.addAnimal(chosenAnimal,sl_sz.getValue(),sl_hor.getValue(),sl_ver.getValue(),c);
+
+			Animal ann = zooFactory.produceAnimal(chosenAnimal,sl_sz.getValue(),sl_hor.getValue(),sl_ver.getValue(),c);
+			ap.addAnimal(ann);
 		    setVisible(false);
 		}
 		else 

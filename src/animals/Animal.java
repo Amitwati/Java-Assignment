@@ -58,8 +58,8 @@ public abstract class Animal extends Observable implements ColoredAnimalDecorato
         cor_w = cor_h = size;
 		coordChanged = false;
 
-	}	
-	
+	}
+
 	public EFoodType getFoodtype() { return EFoodType.MEAT;	}	
 	public IDiet getDiet() { return diet; }
 	public String getName() { return this.name;	}
