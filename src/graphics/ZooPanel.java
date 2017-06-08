@@ -338,6 +338,7 @@ public class ZooPanel extends JPanel implements ActionListener
 
     public void Decorate(){
        ArrayList<String> items = new ArrayList<String>();
+       ArrayList<Integer> good_index = new ArrayList<>();
        String temp;
         Animal an;
 
@@ -347,6 +348,7 @@ public class ZooPanel extends JPanel implements ActionListener
             temp = (i+1)+".["+ an.getName() + " : running = " + an.isRunning() + ", weight = "
                     + an.getWeight() + ", color = "+an.getColor();
             items.add(temp);
+            good_index.add(i);
 
         }
         if(items.size() == 0){
@@ -386,9 +388,9 @@ public class ZooPanel extends JPanel implements ActionListener
 				temp = "Red";
 			}
 
-			Animal animal = animals.get(selected_indx);
+			Animal animal = animals.get(good_index.get(selected_indx));
 			if(animal.PaintAnimal(temp)){
-				animals.set(selected_indx,animal);
+				animals.set(good_index.get(selected_indx),animal);
 			}
 			else{
 				System.out.println("the selected animals is already colored");
