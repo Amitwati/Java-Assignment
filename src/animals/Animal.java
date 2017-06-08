@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Observable;
 import java.util.concurrent.Future;
 import javax.imageio.ImageIO;
 
@@ -17,7 +18,7 @@ import graphics.ZooPanel;
 import mobility.Mobile;
 import mobility.Point;
 
-public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IEdible,IDrawable,IAnimalBehavior,Runnable,Cloneable {
+public abstract class Animal extends Observable implements ColoredAnimalDecorator,IEdible,IDrawable,IAnimalBehavior,Runnable,Cloneable {
 
 	int aviv_homo_ss;
 
@@ -26,6 +27,7 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
 	protected String name;
 	private double weight;
 	boolean isRun;
+	protected Point location;
 	protected int size;
 	protected String col;
 	protected int horSpeed;
@@ -42,7 +44,7 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
 	
 	
 	public Animal(String nm, int sz, int w, int hor, int ver, String c, ZooPanel p) {
-		super(new Point(0,0));
+		location = new Point(0,0);
         name = new String(nm);
 		size = sz;
 		weight = w;
@@ -78,7 +80,16 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
 	public String getColor() { return col; }
 	public boolean isRunning() { return isRun; }
 
-	@Override
+    public Point getLocation() {
+        return location;
+    }
+
+    public Boolean setLocation(Point location) {
+        this.location = location;
+        return true;
+    }
+
+    @Override
 	public boolean PaintAnimal(String col) {
 	    String nm = "";
 		if(!this.col.equals("Natural"))
@@ -139,8 +150,7 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
     	isRun = true;
        while (isRun)
        {
-           try 
-           {
+           try {
                Thread.sleep(50);
                synchronized(this) {
                    while (threadSuspended)
@@ -213,7 +223,9 @@ public abstract class Animal extends Mobile implements ColoredAnimalDecorator,IE
 		    else if(location.getY() < 0) {
                 y_dir = 1;
 		    }
- 		    setChanges(true);
+ 		    setChanged();
+            this.notifyObservers();
+
       }
    }
  

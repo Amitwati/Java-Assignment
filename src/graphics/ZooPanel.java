@@ -28,7 +28,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ZooPanel extends JPanel implements ActionListener, Runnable
+public class ZooPanel extends JPanel implements ActionListener
 {
    private static final long serialVersionUID = 1L;
    private static final int MAX_ANIMAL_NUMBER  = 15;
@@ -48,7 +48,7 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
    private int totalCount;
    private BufferedImage img, img_m;
    private boolean bgr;
-   private Thread controller;
+   private ZooObserver controller;
    private ExecutorService pool;
    private static ZooPanel instance;
 
@@ -61,7 +61,7 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 	    
 	    animals = new ArrayList<Animal>();
 
-	    controller = new Thread(this);
+	    controller = new ZooObserver();
 	    controller.start();
 
 	   pool = Executors.newFixedThreadPool(2);
@@ -223,6 +223,8 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		   an = new Bear(sz,0,0,hor,ver,c,this);
 	   else 
 		   an = new Giraffe(sz,0,0,hor,ver,c,this);
+
+	   an.addObserver(controller);
 	   animals.add(an);
 	   an.setTask(pool.submit(an));
    }
@@ -492,49 +494,28 @@ public class ZooPanel extends JPanel implements ActionListener, Runnable
 		destroy();
    }
 
-	public void run() {
-		while(true) {
-			if(isChange())
-				repaint();
-			
-			boolean prey_eaten = false;
-			synchronized(this) {
-				for(Animal predator : animals) {
-					for(Animal prey : animals) {
-						if(predator != prey && predator.getDiet().canEat(prey) && predator.getWeight()/prey.getWeight() >= 2 &&
-						   (Math.abs(predator.getLocation().getX() - prey.getLocation().getX()) < prey.getSize()) &&
-						   (Math.abs(predator.getLocation().getY() - prey.getLocation().getY()) < prey.getSize())) {
-								preyEating(predator,prey);
-								System.out.print("The "+predator+" cought up the "+prey+" ==> ");
-								prey.interrupt();
-								animals.remove(prey);
-								repaint();
-								//JOptionPane.showMessageDialog(frame, ""+prey+" killed by "+predator);
-								prey_eaten = true;
-								break;
-						}
-					}
-					if(prey_eaten)
-						break;
-				}
-			}
-			try {
-				Thread.sleep(1000/RESOLUTION);
-			} catch (InterruptedException e) {
-				return;
-			}
-		}
-	}
+   public synchronized void chckEat(){
+	   boolean prey_eaten = false;
+	   for(Animal predator : animals) {
+		   for(Animal prey : animals) {
+			   if(predator != prey && predator.getDiet().canEat(prey) && predator.getWeight()/prey.getWeight() >= 2 &&
+					   (Math.abs(predator.getLocation().getX() - prey.getLocation().getX()) < prey.getSize()) &&
+					   (Math.abs(predator.getLocation().getY() - prey.getLocation().getY()) < prey.getSize())) {
+				   preyEating(predator,prey);
+				   System.out.print("The "+predator+" cought up the "+prey+" ==> ");
+				   prey.interrupt();
+				   prey.interrupt();
+				   animals.remove(prey);
+				   repaint();
+				   //JOptionPane.showMessageDialog(frame, ""+prey+" killed by "+predator);
+				   prey_eaten = true;
+				   break;
+			   }
+		   }
+		   if(prey_eaten)
+			   break;
+	   }
+   };
 
-	public boolean isChange() {
-		boolean rc = false;
-		for(Animal an : animals) {
-		    if(an.getChanges()){
-		    	rc = true;
-		    	an.setChanges(false);
-			}
-	    }
-		return rc;
-	}
 
 }
