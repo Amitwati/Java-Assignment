@@ -11,7 +11,7 @@ import mobility.Point;
 public class Turtle extends Animal {
 
 	public Turtle(int s, int h, int v, String c) {
-		 super("Turtle",s,s/2,h,v,c,ZooPanel.getInstance(null));
+		 super("Turtle",s/2,s/2,h,v,c,ZooPanel.getInstance(null));
 		 setDiet(new Herbivore());
 		 loadImages("trt");
 

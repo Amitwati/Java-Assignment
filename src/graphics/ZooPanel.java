@@ -1,4 +1,7 @@
 package graphics;
+import Memento.Memento;
+import Memento.Originator;
+import Memento.ZooMemento;
 import mobility.Point;
 
 import java.awt.*;
@@ -51,9 +54,11 @@ public class ZooPanel extends JPanel implements ActionListener
    private ZooObserver controller;
    private ExecutorService pool;
    private static ZooPanel instance;
+   private ZooMemento states;
 
     private ZooPanel(ZooFrame f)
    {
+   		states = new ZooMemento();
 	    frame = f;
 	    Food = EFoodType.NOTFOOD;
 	    totalCount = 0;
@@ -238,7 +243,6 @@ public class ZooPanel extends JPanel implements ActionListener
                temp.add(an);
            }
        }
-
        animals.clear();
        animals = temp;
        Food = EFoodType.NOTFOOD;
@@ -412,14 +416,14 @@ public class ZooPanel extends JPanel implements ActionListener
                     "There are no animals to duplicate!");
             return;
         }
-        JSlider sl_hor = new JSlider(0,10);
+        JSlider sl_hor = new JSlider(1,10);
         sl_hor.setMajorTickSpacing(2);
         sl_hor.setMinorTickSpacing(1);
         sl_hor.setPaintTicks(true);
         sl_hor.setPaintLabels(true);
         p1.add(sl_hor);
 
-        JSlider sl_ver = new JSlider(0,10);
+        JSlider sl_ver = new JSlider(1,10);
         sl_ver.setMajorTickSpacing(2);
         sl_ver.setMinorTickSpacing(1);
         sl_ver.setPaintTicks(true);
@@ -444,11 +448,57 @@ public class ZooPanel extends JPanel implements ActionListener
             try{
                 an = (Animal)an.clone();
                 an.setLocation(new Point(0,0));
-                addAnimal(an);//an.getClass().getSimpleName(),an.getSize(),sl_hor.getValue(),sl_ver.getValue(),an.getColor());
+                an.setHorSpeed(sl_hor.getValue());
+                an.setVerSpeed(sl_ver.getValue());
+                addAnimal(an);
             }
             catch (CloneNotSupportedException e) { System.out.println("Cannot duplicate animal"); }
         }
     }
+
+	public void SaveState(){
+		String[] labels = {"State 1", "State 2", "State 3","Cancel"};
+		int result = JOptionPane.showOptionDialog(null,"Please choose state for restore",
+				"Saved states", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, labels,
+				"Metric");
+		if (result < 3 && result >= 0 ){
+			Originator originator = new Originator();
+			originator.setState(animals);
+			states.addMemento(originator.createMemento(),result);
+		}
+	}
+
+	private void clearAll(){
+		for (Animal an:animals) {
+			if(an.isRunning()) {
+				an.interrupt();
+			}
+		}
+		animals.clear();
+		Food = EFoodType.NOTFOOD;
+		forFood = null;
+		totalCount = 0;
+	}
+
+	public void RestoreState(){
+		if (!states.haveStates()){JOptionPane.showOptionDialog(null, "No states to restore "
+				,"Error", JOptionPane.PLAIN_MESSAGE, JOptionPane.ERROR_MESSAGE, null, new String[] {"Ok"},
+				null);
+			return;
+		}
+		for (int i=0; i < states.getMaxStates();i++){
+			Memento tmp = states.getMemento(i);
+			if (tmp != null){
+				clearAll();
+				for (Animal an:tmp.getState())
+					addAnimal(an);
+				repaint();
+				break;
+			}
+
+		}
+	}
+
 
    public void destroy()
    { 
@@ -478,9 +528,9 @@ public class ZooPanel extends JPanel implements ActionListener
 	else if(e.getSource() == b_num2[1]) //"Duplicate"
 		Duplicate();
 	else if(e.getSource() == b_num2[2]) //"Save State"
-		System.out.println("SAVE");
+		SaveState();
 	else if(e.getSource() == b_num2[3]) //"Restore state"
-		System.out.println("RESTORE");
+		RestoreState();
 	else if(e.getSource() == b_num2[4]) // "Exit"
 		destroy();
    }

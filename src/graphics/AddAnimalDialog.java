@@ -71,14 +71,14 @@ public class AddAnimalDialog extends JDialog implements ItemListener, ActionList
 		sl_sz.setPaintLabels(true);
 		p1.add(sl_sz);
 		
-		sl_hor = new JSlider(0,10);
+		sl_hor = new JSlider(1,10);
 		sl_hor.setMajorTickSpacing(2);
 		sl_hor.setMinorTickSpacing(1);
 		sl_hor.setPaintTicks(true);
 		sl_hor.setPaintLabels(true);
 		p1.add(sl_hor);
 		
-		sl_ver = new JSlider(0,10);
+		sl_ver = new JSlider(1,10);
 		sl_ver.setMajorTickSpacing(2);
 		sl_ver.setMinorTickSpacing(1);
 		sl_ver.setPaintTicks(true);
