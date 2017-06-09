@@ -1,6 +1,8 @@
 package Memento;
 
 import animals.Animal;
+import food.EFoodType;
+import plants.Plant;
 
 import java.util.ArrayList;
 
@@ -10,11 +12,15 @@ import java.util.ArrayList;
 public class Memento {
 
     private ArrayList<Animal> animals;
-    public Memento(ArrayList<Animal> animals){
+    private EFoodType foodType;
+    private Plant plant;
+    public Memento(ArrayList<Animal> animals, EFoodType foodType, Plant plant){
         this.animals = new ArrayList(animals);
+        this.foodType = foodType;
+        this.plant = plant;
 
     }
-    public ArrayList<Animal> getState() { return animals; }
-
-    public int getAmount(){return  animals.size();}
+    public ArrayList<Animal> getAnimalState() { return animals; }
+    public EFoodType getFoodTypeState() { return foodType; }
+    public Plant getPlantState() { return plant; }
 }

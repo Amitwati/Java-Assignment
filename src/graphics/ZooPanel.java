@@ -463,7 +463,7 @@ public class ZooPanel extends JPanel implements ActionListener
 				"Metric");
 		if (result < 3 && result >= 0 ){
 			Originator originator = new Originator();
-			originator.setState(animals);
+			originator.setState(animals,Food,forFood);
 			states.addMemento(originator.createMemento(),result);
 		}
 	}
@@ -490,8 +490,10 @@ public class ZooPanel extends JPanel implements ActionListener
 			Memento tmp = states.getMemento(i);
 			if (tmp != null){
 				clearAll();
-				for (Animal an:tmp.getState())
+				for (Animal an:tmp.getAnimalState())
 					addAnimal(an);
+				Food = tmp.getFoodTypeState();
+				forFood = tmp.getPlantState();
 				repaint();
 				break;
 			}
