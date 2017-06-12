@@ -34,7 +34,7 @@ import java.util.concurrent.Executors;
 public class ZooPanel extends JPanel implements ActionListener
 {
    private static final long serialVersionUID = 1L;
-   private static final int MAX_ANIMAL_NUMBER  = 15;
+   private static final int MAX_ANIMAL_NUMBER  = 10;
    private final String BACKGROUND_PATH = Animal.PICTURE_PATH+"savanna.jpg";
    private final String MEAT_PATH = Animal.PICTURE_PATH+"meat.gif";
    private final int RESOLUTION = 25; 
@@ -69,7 +69,7 @@ public class ZooPanel extends JPanel implements ActionListener
 	    controller = new ZooObserver();
 	    controller.start();
 
-	   pool = Executors.newFixedThreadPool(2);
+	   pool = Executors.newFixedThreadPool(5);
 
 	   setBackground(new Color(255,255,255));
 	    
@@ -349,6 +349,7 @@ public class ZooPanel extends JPanel implements ActionListener
 			return;
 		}
        JComboBox<String> cmbx = new JComboBox<String>(items.toArray(new String[]{}));
+
        JRadioButton blue,red;
 
         blue = new JRadioButton("Blue");
