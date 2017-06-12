@@ -1,12 +1,10 @@
 package food;
 
 /**
- * @author baroh
- *
+ * Edible interface
  */
 public interface IEdible {
 	/**
-	 * 
 	 * @return The food type for the object
 	 * @see EFoodType
 	 */
