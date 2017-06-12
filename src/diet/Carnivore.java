@@ -5,8 +5,7 @@ import food.EFoodType;
 import food.IEdible;
 
 /**
- * @author baroh
- *
+ * Carnivore class
  */
 public class Carnivore implements IDiet {
 

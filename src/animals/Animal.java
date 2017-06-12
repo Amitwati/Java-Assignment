@@ -18,9 +18,10 @@ import graphics.ZooPanel;
 import mobility.Mobile;
 import mobility.Point;
 
+/**
+ * The animal class
+ */
 public abstract class Animal extends Observable implements ColoredAnimalDecorator,IEdible,IDrawable,IAnimalBehavior,Runnable,Cloneable {
-
-	int aviv_homo_ss;
 
 	protected final int EAT_DISTANCE = 5;
 	private IDiet diet;
@@ -41,8 +42,17 @@ public abstract class Animal extends Observable implements ColoredAnimalDecorato
 	protected boolean threadSuspended;	 
 	protected BufferedImage img1, img2;
 	protected int cor_w, cor_h;
-	
-	
+
+	/**
+	 * Ctor
+	 * @param nm the name of the animal
+	 * @param sz size
+	 * @param w weight
+	 * @param hor horizontal speed
+	 * @param ver vertical speed
+	 * @param c color
+	 * @param p panel
+	 */
 	public Animal(String nm, int sz, int w, int hor, int ver, String c, ZooPanel p) {
 		location = new Point(0,0);
         name = new String(nm);
@@ -60,36 +70,140 @@ public abstract class Animal extends Observable implements ColoredAnimalDecorato
 
 	}
 
-	public EFoodType getFoodtype() { return EFoodType.MEAT;	}	
+	/**
+	 * Get food type
+	 * @return food type
+	 */
+	public EFoodType getFoodtype() { return EFoodType.MEAT;	}
+
+	/**
+	 * get diet
+	 * @return diet
+	 */
 	public IDiet getDiet() { return diet; }
+
+	/**
+	 * get name
+	 * @return name
+	 */
 	public String getName() { return this.name;	}
+
+	/**
+	 * get weight
+	 * @return weight
+	 */
 	public double getWeight() {	return this.weight;	}
+
+	/**
+	 * set wight
+	 * @param w weight
+	 */
 	public void setWeight(double w) { weight = w; }
+
+	/**
+	 * set diet
+	 * @param diet diet
+	 */
 	protected void setDiet(IDiet diet) { this.diet = diet;}
+
+	/**
+	 * get size
+	 * @return size
+	 */
 	public int getSize() { return size; }
+
+	/**
+	 * get horizontal speed
+	 * @return horizontal speed
+	 */
 	public int getHorSpeed() { return horSpeed; }
+
+	/**
+	 * set horizontal speed
+	 * @param hor horizontal speed
+	 */
 	public void setHorSpeed(int hor) { horSpeed  = hor; }
+
+	/**
+	 * get vertical speed
+	 * @return vertical speed
+	 */
 	public int getVerSpeed() { return verSpeed; }
+
+	/**
+	 * set vertical speed
+	 * @param ver vertical spped
+	 */
 	public void setVerSpeed(int ver) { verSpeed  = ver; }
+
+	/**
+	 * Add 1 to eat count
+	 */
 	public void eatInc() { eatCount++; }
+
+	/**
+	 * get eat counter
+	 * @return eat counter
+	 */
 	public int getEatCount() { return eatCount; }
+
+	/**
+	 * The animal thread is suspended
+	 */
 	synchronized public void setSuspend() { threadSuspended = true; }
+
+	/**
+	 * The animal thread is no suspended
+	 */
 	synchronized public void setResume() { threadSuspended = false; notify(); }
+
+	/**
+	 * Check if the animal coordinates has changed
+	 * @return true if the animal coordinates has changed else false
+	 */
 	synchronized public boolean getChanges(){ return coordChanged; }
-	synchronized public void setChanges(boolean state){ coordChanged = state; }	 
+
+	/**
+	 * Set the state of the animal. true if its coordinates has changed else false
+	 * @param state of the animal
+	 */
+	synchronized public void setChanges(boolean state){ coordChanged = state; }
+
+	/**
+	 * get the color of the animal
+	 */
 	public String getColor() { return col; }
+
+	/**
+	 * check if the animal is running
+	 * @return true if the animal is running else false
+	 */
 	public boolean isRunning() { return isRun; }
 
+	/**
+	 * get the location of the animal
+	 * @return location of the animal
+	 */
     public Point getLocation() {
         return location;
     }
 
-    public Boolean setLocation(Point location) {
+	/**
+	 * set the location of the animal
+	 * @param location the new location we want to put the animal in
+	 * @return true if we successfully moved the animal to the new point else false
+	 */
+	public Boolean setLocation(Point location) {
         this.location = location;
         return true;
     }
 
-    @Override
+	/**
+	 * paint the animal with some color
+	 * @param col the color
+	 * @return true if we managed to color the animal else false
+	 */
+	@Override
 	public boolean PaintAnimal(String col) {
 	    String nm = "";
 		if(!this.col.equals("Natural"))
@@ -117,15 +231,26 @@ public abstract class Animal extends Observable implements ColoredAnimalDecorato
 
 	}
 
+	/**
+	 * Interrupt the animal in order to remove it from the threadpool
+	 */
 	public void interrupt() {
 		isRun = false;
 		task.cancel(true); // to remove thread of animal from Threadpool
 	}
 
+	/**
+	 * set task of the animal in order to add it to threadpool
+	 * @param tsk the task
+	 */
 	public void setTask(Future<?> tsk) {
 		this.task = tsk;
 	}
 
+	/**
+	 * load image from the pictures
+	 * @param nm name of the animal
+	 */
 	public void loadImages(String nm){
 		 switch(getColor()){
 			 case "Red":
@@ -145,6 +270,9 @@ public abstract class Animal extends Observable implements ColoredAnimalDecorato
 		 }
 	}
 
+	/**
+	 * run method of the animal
+	 */
     public void run() 
     {
     	isRun = true;
@@ -228,8 +356,12 @@ public abstract class Animal extends Observable implements ColoredAnimalDecorato
 
       }
    }
- 
-    public void drawObject(Graphics g)
+
+	/**
+	 * draw the animal on the panel
+	 * @param g graphics
+	 */
+	public void drawObject(Graphics g)
     {
  		if(x_dir==1) // an animal goes to right side
  		{
@@ -242,11 +374,24 @@ public abstract class Animal extends Observable implements ColoredAnimalDecorato
  		
     }
 
-    public String toString(){
+	/**
+	 * Print the animal with costume string
+	 * @return
+	 */
+	public String toString(){
     	return "["+getName() + ": weight=" + weight + ", color="+col+"]";
     }
 
-    public Object clone() throws CloneNotSupportedException{
-        return super.clone();
+	/**
+	 * clone the animal
+	 * @return cloned animal
+	 * @throws CloneNotSupportedException in case the we can't clone
+	 */
+	public Object clone() throws CloneNotSupportedException{
+    	Animal an = null;
+    	try{
+    		an = (Animal) super.clone();
+		}catch (CloneNotSupportedException e){e.printStackTrace();}
+		return an;
     }
 }

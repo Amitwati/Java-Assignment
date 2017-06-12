@@ -1,8 +1,7 @@
 package mobility;
 
 /**
- * @author baroh
- *
+ * Location interface
  */
 public interface ILocatable {
 	/**
