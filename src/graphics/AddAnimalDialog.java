@@ -10,6 +10,9 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
+/**
+ * dialog class to create new animal on the zoopanel list
+ */
 public class AddAnimalDialog extends JDialog implements ItemListener, ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JPanel p1,p2,p3,p4,p5,p6,p7,p8;
@@ -27,11 +30,17 @@ public class AddAnimalDialog extends JDialog implements ItemListener, ActionList
     private JRadioButton[] rb1;
     AbstractZooFactory zooFactory;
     private ZooPanel ap;
- 
-    public AddAnimalDialog(ZooPanel pan, String title)
+
+	/**
+	 * define the dialog parameters and GUI
+
+	 * @param title
+	 * 			the title of the dialog
+	 */
+	public AddAnimalDialog(String title)
     {
     	super(new JFrame(),title,true);
-    	ap = pan;
+    	ap = ZooPanel.getInstance(null);
 
     	setSize(550,300);
 
@@ -137,7 +146,8 @@ public class AddAnimalDialog extends JDialog implements ItemListener, ActionList
 		add("Center", p5);
 		add("South" , p3);
     }
-    public void itemStateChanged(ItemEvent e)
+
+	public void itemStateChanged(ItemEvent e)
     {
 		for(int i=0;i<rb.length;i++)
 			if(rb[i].isSelected())
@@ -153,6 +163,7 @@ public class AddAnimalDialog extends JDialog implements ItemListener, ActionList
 		    	break;
 	        }
     }
+
     public void actionPerformed(ActionEvent e)
     {
  		if(e.getSource() == ok)

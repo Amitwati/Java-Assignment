@@ -1,19 +1,27 @@
 package plants;
 
-import graphics.ZooPanel;
 
-import java.awt.*;
-
+/**
+ * Cabbage singlton class
+ */
 public class Cabbage extends Plant {
 	private static Cabbage instance;
-	private Cabbage(ZooPanel pan) {
-		super(pan);
+
+	/**
+	 * private ctor for the instance
+	 */
+	private Cabbage() {
+		super();
 		loadImages("cabbage");
 	}
 
-	public static Cabbage getInstance(ZooPanel pan) {
+	/**
+	 * get the instance and initlize it if it null
+	 * @return instance object
+	 */
+	public static Cabbage getInstance() {
 		if(instance == null)
-			instance = new Cabbage(pan);
+			instance = new Cabbage();
 
 		return instance;
 	}

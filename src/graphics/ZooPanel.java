@@ -3,41 +3,33 @@ import Memento.Memento;
 import Memento.Originator;
 import Memento.ZooMemento;
 import mobility.Point;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import animals.Animal;
-import animals.Bear;
-import animals.Elephant;
-import animals.Giraffe;
-import animals.Lion;
-import animals.Turtle;
 import food.EFoodType;
-import mobility.*;
 import plants.Cabbage;
 import plants.Lettuce;
 import plants.Plant;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * singleton class that reprenset the main panel of the program
+ */
 public class ZooPanel extends JPanel implements ActionListener
 {
    private static final long serialVersionUID = 1L;
    private static final int MAX_ANIMAL_NUMBER  = 10;
    private final String BACKGROUND_PATH = Animal.PICTURE_PATH+"savanna.jpg";
    private final String MEAT_PATH = Animal.PICTURE_PATH+"meat.gif";
-   private final int RESOLUTION = 25; 
+   private final int RESOLUTION = 25;
    private ZooFrame frame;
    private EFoodType Food;
    private JPanel p1,p2,p3;
@@ -56,6 +48,11 @@ public class ZooPanel extends JPanel implements ActionListener
    private static ZooPanel instance;
    private ZooMemento states;
 
+	/**
+	 * private ctor for the singleton
+	 * @param f
+	 * 			the zooframe instance in case of first call to the get instance method
+	 */
     private ZooPanel(ZooFrame f)
    {
    		states = new ZooMemento();
@@ -115,6 +112,12 @@ public class ZooPanel extends JPanel implements ActionListener
 		catch (IOException e) { System.out.println("Cannot load meat"); }
    }
 
+	/**
+	 * get the instance of the zoopanel and initlize the instance if its null
+	 * @param f
+	 * 			the param for the initilize instance
+	 * @return the instance of the zoo panel
+	 */
    public static ZooPanel getInstance(ZooFrame f){
        if(instance == null)
            instance = new ZooPanel(f);
@@ -122,6 +125,7 @@ public class ZooPanel extends JPanel implements ActionListener
        return instance;
    }
 
+   @Override
    public void paintComponent(Graphics g)
    {
 	   	super.paintComponent(g);	
@@ -142,8 +146,13 @@ public class ZooPanel extends JPanel implements ActionListener
                 }
 	   	}
    }
-   
-   public void setBackgr(int num) {
+
+	/**
+	 * set the background for the panel
+	 * @param num
+	 * 			choose the background from 3 option
+	 */
+	public void setBackgr(int num) {
 	   switch(num) {
 	   case 0:
 		   setBackground(new Color(255,255,255));
@@ -158,8 +167,12 @@ public class ZooPanel extends JPanel implements ActionListener
 	   }
 	   repaint();
    }
-   
-   synchronized public EFoodType checkFood()
+
+	/**
+	 * check if there is food on the panel
+	 * @return
+	 */
+	synchronized public EFoodType checkFood()
    {
 	   return Food;
    }
@@ -185,7 +198,10 @@ public class ZooPanel extends JPanel implements ActionListener
 	   }
    }
 
-   public void addDialog()
+	/**
+	 * call and manage the addAnimal dialog
+	 */
+	public void addDialog()
    {
        if(animals.size()==MAX_ANIMAL_NUMBER) {
 		   JOptionPane.showMessageDialog(this, "You cannot add more than "+MAX_ANIMAL_NUMBER+" animals");
@@ -196,43 +212,57 @@ public class ZooPanel extends JPanel implements ActionListener
            int res = JOptionPane.showOptionDialog(null,"choose animal type :","animal select",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,
                    null,opt,"ss");
 
-           String prase;
+           String parse;
            switch (res) {
                case 0:
-                   prase = "Carnivore";
+                   parse = "Carnivore";
                    break;
                case 1:
-                   prase = "Herbivore";
+                   parse = "Herbivore";
                    break;
                case 2:
-                   prase = "Omnivore";
+                   parse = "Omnivore";
                    break;
                default:
                    return;
            }
-		   AddAnimalDialog dial = new AddAnimalDialog(this,prase);
+		   AddAnimalDialog dial = new AddAnimalDialog(parse);
 		   dial.setVisible(true);
 	   }
    }
-   
-   public void addAnimal(Animal an)
+
+	/**
+	 * add animal to the zoo
+	 * @param an
+	 * 			animal instance
+	 */
+	public void addAnimal(Animal an)
    {
 	   an.addObserver(controller);
 	   animals.add(an);
 	   an.setTask(pool.submit(an));
    }
 
+	/**
+	 * start the animal's observe
+	 */
 	public void start() {
 	    for(Animal an : animals)
 	    	an.setResume();
    }
 
- 	public void stop() {
+	/**
+	 * stop the animals
+	 */
+	public void stop() {
 	    for(Animal an : animals)
 	    	an.setSuspend();
    }
 
-   synchronized public void clear()
+	/**
+	 * clear the running animals and show the blocked animals
+	 */
+	synchronized public void clear()
    {
        ArrayList<Animal> temp = new ArrayList<>();
        for (Animal an:animals) {
@@ -251,13 +281,23 @@ public class ZooPanel extends JPanel implements ActionListener
 	   repaint();
    }
 
+	/**
+	 * make animal eat another animal
+	 * @param predator
+	 * 			animal that eat
+	 * @param prey
+	 * 			animal that be eaten
+	 */
    synchronized public void preyEating(Animal predator, Animal prey)
    {
 	   predator.eatInc();
 	   totalCount -= (prey.getEatCount()-1);
    }
 
-   synchronized public void addFood()
+	/**
+	 * show add food dialog
+	 */
+	synchronized public void addFood()
    {
 	   if(Food == EFoodType.NOTFOOD){
            Object[] options = {"Meat", "Cabbage", "Lettuce"};
@@ -287,7 +327,10 @@ public class ZooPanel extends JPanel implements ActionListener
 	   }
 	   repaint();
   }
-   
+
+	/**
+	 * show the info table
+	 */
    public void info()
    {  	 
 	   if(isTableVisible == false)
@@ -328,7 +371,10 @@ public class ZooPanel extends JPanel implements ActionListener
        repaint();
    }
 
-    public void Decorate(){
+	/**
+	 * open decorate form with the animals with natural color
+	 */
+	public void Decorate(){
        ArrayList<String> items = new ArrayList<String>();
        ArrayList<Integer> good_index = new ArrayList<>();
        String temp;
@@ -510,7 +556,8 @@ public class ZooPanel extends JPanel implements ActionListener
 	  controller.interrupt();
       System.exit(0);
    }
-   
+
+   @Override
    public void actionPerformed(ActionEvent e)
    {
 	if(e.getSource() == b_num[0]) // "Add Animal"
@@ -538,10 +585,15 @@ public class ZooPanel extends JPanel implements ActionListener
 		destroy();
    }
 
-   public synchronized void chckEat(){
+	/**
+	 * check if there are animals that can eat other animals on the panels
+	 */
+	public synchronized void chckEat(){
 	   boolean prey_eaten = false;
 	   for(Animal predator : animals) {
+	   		if(!predator.isRunning()) continue;
 		   for(Animal prey : animals) {
+			   if(!prey.isRunning()) continue;
 			   if(predator != prey && predator.getDiet().canEat(prey) && predator.getWeight()/prey.getWeight() >= 2 &&
 					   (Math.abs(predator.getLocation().getX() - prey.getLocation().getX()) < prey.getSize()) &&
 					   (Math.abs(predator.getLocation().getY() - prey.getLocation().getY()) < prey.getSize())) {

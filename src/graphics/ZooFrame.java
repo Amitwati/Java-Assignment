@@ -3,9 +3,10 @@ package graphics;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
+/**
+ * main frame of the program
+ */
 public class ZooFrame extends JFrame implements ActionListener
 {
    private static final long serialVersionUID = 1L;
@@ -15,7 +16,10 @@ public class ZooFrame extends JFrame implements ActionListener
    private JMenuItem[] mi;
    private JMenuBar mb;
 
-
+	/**
+	 * main method
+	 * @param args
+	 */
    public static void main(String[]args)
    {
 	   ZooFrame aqua = new ZooFrame();
@@ -24,7 +28,10 @@ public class ZooFrame extends JFrame implements ActionListener
 	   aqua.setVisible(true);
    }
 
-   public ZooFrame()
+	/**
+	 * ctor for the zooframe
+	 */
+	public ZooFrame()
    {
 	    super("Zoo");
 	    panel = ZooPanel.getInstance(this);
@@ -59,6 +66,7 @@ public class ZooFrame extends JFrame implements ActionListener
 		setJMenuBar(mb);
    }
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == mi[0])
 			destroy();
@@ -71,11 +79,17 @@ public class ZooFrame extends JFrame implements ActionListener
 		else if(e.getSource() == mi[4])
 			printHelp();
 	}
-	
+
+	/**
+	 * stop the panel's component
+	 */
 	public void destroy() {
 		panel.destroy();
 	}
-	
+
+	/**
+	 * print the help dialog
+	 */
 	public void printHelp() {
 		JOptionPane.showMessageDialog(this, "Home Work 4\nGUI @ Threads");
 	}

@@ -7,6 +7,7 @@ import graphics.ZooPanel;
 
 /**
  * Created by Amitw on 07-Jun-17.
+ * factory for animals that have "Carnivore" diet
  */
 public class CarnivoreFactory implements AbstractZooFactory {
     @Override

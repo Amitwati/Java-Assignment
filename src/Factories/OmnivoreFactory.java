@@ -5,6 +5,7 @@ import animals.Bear;
 
 /**
  * Created by Amitw on 07-Jun-17.
+ * factory for animals that have "omnivore" diet
  */
 public class OmnivoreFactory implements AbstractZooFactory{
     @Override

@@ -7,6 +7,7 @@ import animals.Turtle;
 
 /**
  * Created by Amitw on 07-Jun-17.
+ * factory for animals that have "herbivore" diet
  */
 public class HerbivoreFactory implements AbstractZooFactory {
     @Override
