@@ -311,11 +311,11 @@ public class ZooPanel extends JPanel implements ActionListener
                    break;
                case 1: // Cabbage
                    Food = EFoodType.VEGETABLE;
-                   forFood = Cabbage.getInstance(this);
+                   forFood = Cabbage.getInstance();
                    break;
                case 2: // Lettuce
                    Food = EFoodType.VEGETABLE;
-                   forFood = Lettuce.getInstance(this);
+                   forFood = Lettuce.getInstance();
                    break;
                default:
                    break;
