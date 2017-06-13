@@ -509,15 +509,16 @@ public class ZooPanel extends JPanel implements ActionListener
 	/**
 	 * Save state method using memento
 	 */
-	public void SaveState(){
-		String[] labels = {"State 1", "State 2", "State 3","Cancel"};
-		int result = JOptionPane.showOptionDialog(null,"Please choose state for restore",
-				"Saved states", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, labels,
-				"Metric");
-		if (result < 3 && result >= 0 ){
+	public void SaveState() {
+		if (states.getAmountOfStates() < 3) {
 			Originator originator = new Originator();
-			originator.setState(animals,Food,forFood);
-			states.addMemento(originator.createMemento(),result);
+			originator.setState(animals, Food, forFood);
+			states.addMemento(originator.createMemento());
+			JOptionPane.showMessageDialog(frame, "State saved successfully", "Success",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(frame, "Can't save more then 3 states", "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -545,8 +546,17 @@ public class ZooPanel extends JPanel implements ActionListener
 				null);
 			return;
 		}
-		for (int i=0; i < states.getMaxStates();i++){
-			Memento tmp = states.getMemento(i);
+		String[] labels = new String[states.getAmountOfStates() + 1];
+		int i ;
+		for (i = 0;i<states.getAmountOfStates();i++){
+			labels[i] = "State" + (i+1);
+		}
+		labels[i] = "Cancel";
+		int result = JOptionPane.showOptionDialog(null,"Please choose state for restore",
+				"Saved states", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, labels,
+				"Metric");
+		if (result >= 0 && result < states.getAmountOfStates()){
+			Memento tmp = states.getMemento(result);
 			if (tmp != null){
 				clearAll();
 				for (Animal an:tmp.getAnimalState())
@@ -554,10 +564,9 @@ public class ZooPanel extends JPanel implements ActionListener
 				Food = tmp.getFoodTypeState();
 				forFood = tmp.getPlantState();
 				repaint();
-				break;
 			}
-
 		}
+
 	}
 
 	/**
@@ -617,7 +626,6 @@ public class ZooPanel extends JPanel implements ActionListener
 				   prey.interrupt();
 				   animals.remove(prey);
 				   repaint();
-				   //JOptionPane.showMessageDialog(frame, ""+prey+" killed by "+predator);
 				   prey_eaten = true;
 				   break;
 			   }

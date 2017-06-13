@@ -7,15 +7,14 @@ import java.util.ArrayList;
  */
 public class ZooMemento {
     private final int MAX_STATES = 3;
-    private Memento[] statesList = new Memento[MAX_STATES];
+    private ArrayList<Memento> statesList = new ArrayList<Memento>();
 
     /**
      * Add a memento by index
      * @param m memento
-     * @param index the index
      */
-    public void addMemento(Memento m,int index) {
-        statesList[index] = m;
+    public void addMemento(Memento m) {
+        statesList.add(m);
     }
 
     /**
@@ -25,12 +24,9 @@ public class ZooMemento {
      * @return memento by index
      */
     public Memento getMemento(int index) {
-        if ( index  < MAX_STATES){
-            Memento tmp = statesList[index];
-            statesList[index] = null;
-            return tmp;
-        }
-        return null;
+        Memento tmp = statesList.get(index);
+        statesList.remove(index);
+        return  tmp;
     }
 
     /**
@@ -45,11 +41,10 @@ public class ZooMemento {
      * @return
      */
     public boolean haveStates(){
-        for (int i = 0;i< MAX_STATES;i++){
-            if (statesList[i] != null){
-                return true;
-            }
-        }
-        return false;
+        return !statesList.isEmpty();
+    }
+
+    public int getAmountOfStates(){
+        return statesList.size();
     }
 }

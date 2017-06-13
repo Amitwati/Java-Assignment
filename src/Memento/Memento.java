@@ -22,7 +22,12 @@ public class Memento {
      * @param plant plant
      */
     public Memento(ArrayList<Animal> animals, EFoodType foodType, Plant plant){
-        this.animals = new ArrayList(animals);
+        this.animals = new ArrayList(animals.size());
+        for(Animal an:animals){
+            try{
+                this.animals.add((Animal)an.clone());
+            }catch (CloneNotSupportedException e) {e.printStackTrace();}
+        }
         this.foodType = foodType;
         this.plant = plant;
 
