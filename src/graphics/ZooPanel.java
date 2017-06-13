@@ -561,7 +561,7 @@ public class ZooPanel extends JPanel implements ActionListener
 	}
 
 	/**
-	 * Remove the animals that running on the panel
+	 * Remove the animals that running on the panel.
 	 */
    public void destroy()
    { 
