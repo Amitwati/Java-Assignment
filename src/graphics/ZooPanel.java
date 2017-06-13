@@ -442,6 +442,9 @@ public class ZooPanel extends JPanel implements ActionListener
 
 	}
 
+	/**
+	 * Duplicate method  using clone
+	 */
 	public void Duplicate(){
         if (animals.size() == 10){
             JOptionPane.showMessageDialog(this,
@@ -503,6 +506,9 @@ public class ZooPanel extends JPanel implements ActionListener
         }
     }
 
+	/**
+	 * Save state method using memento
+	 */
 	public void SaveState(){
 		String[] labels = {"State 1", "State 2", "State 3","Cancel"};
 		int result = JOptionPane.showOptionDialog(null,"Please choose state for restore",
@@ -515,6 +521,9 @@ public class ZooPanel extends JPanel implements ActionListener
 		}
 	}
 
+	/**
+	 * Delete all animals and food from the panel
+	 */
 	private void clearAll(){
 		for (Animal an:animals) {
 			if(an.isRunning()) {
@@ -527,6 +536,9 @@ public class ZooPanel extends JPanel implements ActionListener
 		totalCount = 0;
 	}
 
+	/**
+	 * Restore states from saved states
+	 */
 	public void RestoreState(){
 		if (!states.haveStates()){JOptionPane.showOptionDialog(null, "No states to restore "
 				,"Error", JOptionPane.PLAIN_MESSAGE, JOptionPane.ERROR_MESSAGE, null, new String[] {"Ok"},
@@ -548,7 +560,9 @@ public class ZooPanel extends JPanel implements ActionListener
 		}
 	}
 
-
+	/**
+	 * Remove the animals that running on the panel
+	 */
    public void destroy()
    { 
 	  for(Animal an : animals)
