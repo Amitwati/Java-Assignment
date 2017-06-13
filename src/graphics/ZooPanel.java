@@ -379,11 +379,11 @@ public class ZooPanel extends JPanel implements ActionListener
        ArrayList<Integer> good_index = new ArrayList<>();
        String temp;
         Animal an;
-
+		int j = 1;
         for (int i=0;i<animals.size();i++) {
              an = animals.get(i);
              if(!an.getColor().equals("Natural")) continue;
-            temp = (i+1)+".["+ an.getName() + " : running = " + an.isRunning() + ", weight = "
+            temp = (j++)+".["+ an.getName() + " : running = " + an.isRunning() + ", weight = "
                     + an.getWeight() + ", color = "+an.getColor();
             items.add(temp);
             good_index.add(i);
