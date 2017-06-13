@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 
 /**
  * main frame of the program
+ * Amit twati - 318278181
+ * Aviv Adar - 208897371
  */
 public class ZooFrame extends JFrame implements ActionListener
 {
